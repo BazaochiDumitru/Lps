@@ -1,0 +1,3 @@
+C:/Users/Asus/Desktop/lps-master/lps-master/LPS6-master/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Asus/Desktop/lps-master/lps-master/LPS6-master/out/build/x64-Debug/CMakeFiles/LPS6.dir
+C:/Users/Asus/Desktop/lps-master/lps-master/LPS6-master/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
