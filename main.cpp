@@ -1,205 +1,179 @@
 #include <iostream>
-#define NMAX 100
-#include <stdio.h>
-#include <cstdlib>
+#include <iomanip>
+#include <stdlib.h>
 #include <conio.h>
+#define NMAX 100
 
 using namespace std;
-void createMatrix(int matrix[NMAX][NMAX], int row, int col);
-void minMax(int matrix[NMAX][NMAX], int row, int col);
-void interschimbare(int matrix[NMAX][NMAX], int row, int col, int n1, int n2);
-void showArr(int matrix[NMAX][NMAX], int row, int col);
-void addLine(int matrix[NMAX][NMAX], int &row, int &col );
-void matrixSort(int matrix[NMAX][NMAX], int &row, int &col);
-void generateMatrix(int row, int col);
+//interfata programului
+int Citire(int n, int a[]);
+int Afisare(int n, int a[], char sir[]);
+int Minimum(int n, int a[]);
+int Maximum(int n, int a[]);
+float Media(int n, int a[]);
+int RotireStangaOdata(int n, int a[]);
+void RotireStanga(int n, int a[], int k);
+int Ordonare(int n, int a[]);
+int Cautare(int n, int a[], int val);
+int Inserare(int &n, int a[], int k);
+int Stergere(int &n, int a[], int k);
+int Modificare(int n, int a[]);
+int Generare(int n, int a[]);
+int Caracteristica(int n, int a[]);
+int main()
+{
+    int opt;
+    int n = 10;
+    int rotationNumber;
+    int k;
+    int note[NMAX] = { 5, 6, 8, 1, 4, 2, 10, 3, 7, 9};
 
-int main() {
-   int key;
-   int row, col;
-   int ore;
-   int l1,l2;
-   int matrix[NMAX][NMAX];
-   cout << "Dati nr de linii" << endl;
-   cin >> row;
-   cout << "Dati nr de coloane" << endl;
-   cin >> col;
-   createMatrix(matrix, row, col);
-  do {
-    system("cls");
-    cout << "\n\tProiect numarul 4 elaborat de Bazaochi Dumitru" << endl;
-    cout << "1. De determinat in matrice valoarea minima si maxima." << endl;
-    cout << "2. De interschimbat 2 linii " << endl;
-    cout << "3. De adaugat o coloana" << endl;
-    cout << "4. De aranjat matricea" << endl;
-    cout << "5. De generat matricea" << endl;
-    cout << "\t|1 1 1|\n";
-    cout << "\t|1 2 3|\n";
-    cout << "\t|1 3 6|\n\n";
-    cout << "0. Exit" << endl;
+    do
+    {
+        system("cls");
+        cout << "\n\tProiect numarul 3 elaborat de Bazaochi Dumitru" << endl;
+        cout << "1. Minumul si maximul" << endl;
+        cout << "2. Media" << endl;
+        cout << "3. Ordonarea notelor (crescator)" << endl;
+        cout << "4. Rotirea" << endl;
+        cout << "5. Adaugarea unui element" << endl;
+        cout << "6. Stergerea unui element" << endl;
+        cout << "0. STOP" << endl;
+        cout << "\n\tAlegeti o optiune (de la 0 la 7): ";
+        cin >> opt;
+        switch(opt)
+        {
+        case 1:
+            Afisare(n, note, "initial");
+            cout << "\nCea mai mica varsta (min) este " << Minimum(n, note);
+            cout << "\nCea mai mare varsta (max) este " << Maximum(n, note);
+            _getch();
+            break;
+        case 2:
+            cout << "\nMedia varstelor este: " << Media(n, note);
+            _getch();
+            break;
+        case 3:
+            Afisare(n, note, "initial");
+            Ordonare(n, note);
+            Afisare(n, note, "ordonat crescator");
+            _getch();
+            break;
+        case 4:
+            cout << "De cate ori doriti sa rotiti vectorul " ;
+            cin >> rotationNumber;
+            Afisare(n, note, "initial");
+            RotireStanga(n, note, rotationNumber);
+            Afisare(n, note, "schimbat");
+            _getch();
+            break;
+        case 5:
+            cout << "Dati valoarea care doriti sa o adaugati: ";
+            cin >> k;
+            Afisare(n, note, "initial");
+            Inserare(n, note, k);
+            Afisare(n, note, "cu elementul inserat");
+            _getch();
+            break;
+        case 6:
+            cout << "Dati pozitia elementului care doriti sa-l stergeti: ";
+            cin >> k;
+            Afisare(n, note, "initial");
+            Stergere(n, note, k);
+            Afisare(n, note, "cu un element sters");
+            _getch();
+            break;
+        }
+    } while (opt);
 
-    cout << "\t\t Selecteaza Optiunea ==> ";
-    cin >> key;
-
-    switch (key) {
-    case 1:
-      system("cls");
-      showArr(matrix, row, col);
-       minMax(matrix, row, col);
-      getch();
-      break;
-      
-    case 2:
-      system("cls");
-     showArr(matrix, row, col);
-        cout << "Dati linia 1" << endl;
-        cin >> l1;
-        cout << "Dati linia 2" << endl;
-        cin >> l2;
-       interschimbare(matrix, row,col, l1,l2);
-        showArr(matrix, row,col);
-      getch();
-      break;
-
-    case 3:
-      system("cls");
-         showArr(matrix, row, col);
-         addLine(matrix, row, col);
-         showArr(matrix,row,col);
-      getch();
-      break;
-
-    case 4:
-      system("cls");
-        showArr(matrix, row, col);
-        matrixSort(matrix, row, col);
-        cout << "------------------" << endl;
-        showArr(matrix, row, col);
-      getch();
-      break;
-
-    case 5:
-      system("cls");
-     	generateMatrix(row, col);
-      getch();
-      break;
-
-    }
-  }
-  while (key != 0);
     return 0;
-};
+}
+int Citire(int n, int a[])
+{
 
-    void createMatrix(int matrix[NMAX][NMAX], int row, int col) {
-       for (int i = 0; i < row; i++) {
-           for (int j = 0; j < col; j++){
-               cout << "Dati elementul [ " << i << ", " << j << " ]" << endl;
-               cin >> matrix[i][j];
-           }
-           cout << endl;
-       }
+}
+int Afisare(int n, int a[], char sir[])
+{
+    cout << "\nTabelul " << sir << " de varste\n";
+    for(int i=0; i<n; i++)
+        cout << setw(7) << a[i];
+        cout << endl;
+    return 1;
+}
+int Minimum(int n, int a[1])
+{
+    int aux = a[0];
+    for(int i=1; i<n; i++)
+        if (a[i] < aux)
+            aux = a[i];
+    return aux;
+}
+int Maximum(int n, int a[])
+{
+    int aux = a[0];
+    for(int i=1; i<n; i++)
+        if (a[i] > aux)
+            aux = a[i];
+    return aux;
+}
+float Media(int n, int a[])
+{
+    float media = 0;
+    int i = 0;
+    for (i; i < n; i++){
+        media += a[i];
     }
-    void minMax(int matrix[NMAX][NMAX], int row, int col) {
-        int max, maxI, maxJ, min, minI, minJ;
-        max = matrix[0][0];
-        min = matrix[0][0];
-         for (int i = 0; i < row; i++) {
-           for (int j = 0; j < col; j++){
-               if (max < matrix[i][j]) {
-                   max = matrix[i][j];
-                   maxI = i;
-                   maxJ = j;
-               }
-                if (min > matrix[i][j]) {
-                   min = matrix[i][j];
-                   minI = i;
-                   minJ = j;
-               }
-           }
-         }
-         cout << "Valoarea maxima:" << max << " i = " << maxI << " j =" << maxJ << endl;
-         cout << "Valoarea minima:" << min << " i = " << minI << " j =" << minJ << endl;
+    return media / n;
+}
+void RotireStanga(int n, int a[], int k){
+    for (int i = 0; i < k; i++){
+        RotireStangaOdata(n, a);
     }
-    
-   void interschimbare(int matrix[NMAX][NMAX], int row, int col, int n1, int n2){
-	int temp;
-	for (int j = 0; j < col; j++)
+}
+int RotireStangaOdata(int n, int a[])
+{
+    int i, aux;
+	if(n==0) return 0;
+	aux = a[0];
+	for(i=0; i<n-1; i++)
+		a[i] = a[i+1];
+	a[n-1] = aux;
+	return 1;
+
+}
+int Ordonare(int n, int a[])
+{
+    int i, j=0, m, aux;
+	do
 	{
-		temp = matrix[n1-1][j];
-		matrix[n1-1][j] = matrix[n2-1][j];
-		matrix[n2-1][j] = temp;
-	}
-}
-    
-       void showArr(int matrix[NMAX][NMAX], int row, int col) {
-       for (int i = 0; i < row; i++) {
-           for (int j = 0; j < col; j++){
-               cout << matrix[i][j] << " ";
-           }
-           cout << endl;
-       }
-    }
-    
-  void addLine(int matrix[NMAX][NMAX], int &row, int &col ){
-  int count = 0;
-  col++;
-  cout << row << endl;
-  cout << col << endl;
-  for (int i = 0; i < row; i++){
-  	for (int j = 0; j <= col; j++) {
-  		if (j < col - 1) {
-  		 if (matrix[i][j] < 30) {
-   		 	count++;
-		}	
-  		} else {
-  			 matrix[i][j] = count;
-            count = 0;
-		  }
-	  }
-  }
-}
-    
-    void matrixSort(int matrix[NMAX][NMAX], int &row, int &col){
-	int temp, k;
-	bool change;
-	k = 0;
-	do{
-		k ++;
-		change = 0;
-		for( int i  = 0; i < row - k; i++){
-			if(matrix[i][col - 1] > matrix[i + 1][col - 1]){
-				for(int  j = 0; j < col; j ++){
-					temp = matrix[i][j];
-					matrix[i][j] = matrix[i+1][j];
-					matrix[i+1][j] = temp;
-				}
-				change = 1;
+		m = 0; j++;
+		for(i=0; i<n-j; i++)
+			if(a[i] > a[i+1]) {
+				aux = a[i]; a[i] = a[i+1]; a[i+1] = aux; m = 1;
 			}
-		}
-	}while(change);
+	} while(m);
+	return 1;
+}
+int Inserare(int &n, int a[], int k)
+{
+    int i;
+	if(n==0) return 0;
+		n++;
+	for(i=n-1; i>0; i--)
+		a[i] = a[i-1];
+	a[0] = k;
+	return 1;
+
+}
+int Stergere(int &n, int a[], int k)
+{
+    n--;
+    for (int i = k - 1; i < n; i++) {
+        a[i] = a[i + 1];
+    }
 }
 
-	void generateMatrix(int row, int col) {
-		int generated[row][col];
-			 for (int i = 0; i <= row; i++) {
-	           for (int j = 0; j <= col; j++){
-	           		if (i == 0 || j == 0 ) {
-	           			generated[i][j] = 1;
-			 }  else
-			 {
-			 	generated[i][j] = generated[i-1][j] + generated[i][j-1];
-			 }
-	           }
-	           }
-	           
-	           
-		 for (int i = 0; i < row; i++) {
-	           for (int j = 0; j < col; j++){
-	               cout << generated[i][j] << " ";
-	           }
-	           cout << endl;
-	       }
-	   }
 
+int Caracteristica(int n, int a[1]){
 
-
-
+}
